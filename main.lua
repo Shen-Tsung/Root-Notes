@@ -72,8 +72,8 @@ function love.resize()
 	scroll.notes.h = Height / 1.4
 
 	for i = 1, #scroll.notes_element do
-		scroll.notes_element[i].x = scroll.notes.x + (scroll.notes.w - scroll.notes.w / 1.2) / 2
-		scroll.notes_element[i].y = scroll.notes.y + ((scroll.notes.h / 9) * i)
+		scroll.notes_element[i].x = (scroll.notes.w - scroll.notes.w / 1.2) / 2
+		scroll.notes_element[i].y = (scroll.notes.h / 9) * i
 		scroll.notes_element[i].w = scroll.notes.w / 1.2
 		scroll.notes_element[i].h = scroll.notes.h / 10
 	end
@@ -96,8 +96,8 @@ function love.draw()
 	ui.scroll.draw(scroll.notes) 
 	love.graphics.pop()
 
-	love.graphics.printf("Ширина = " .. Width, 0, 10, Width, "center")
-	love.graphics.printf("Высота = " .. Height, 0, 30, Width, "center")
+	love.graphics.printf("Ширина = " .. love.graphics.getWidth(), 0, 10, Width, "center")
+	love.graphics.printf("DPI = " .. love.window.getDPIScale(), 0, 30, Width, "center")
 end
 
 -- Обработка касаний
