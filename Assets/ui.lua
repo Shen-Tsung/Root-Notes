@@ -133,9 +133,9 @@ function ui.scroll.draw(scrl)
 	love.graphics.setColor(color.area)
 	love.graphics.rectangle("fill", scrl.x, scrl.y, scrl.w, scrl.h, 30, 30)
 	
-	love.graphics.setScissor(scrl.x, scrl.y, scrl.w, scrl.h)
 	love.graphics.push()
 	love.graphics.translate(scrl.x, scrl.y - scrl.scroll_y)
+	love.graphics.setScissor(scrl.x, scrl.y, scrl.w, scrl.h)
 	
 	-- Отрисовка элементов
 	for i = 1, #scrl.elements do
@@ -147,8 +147,8 @@ function ui.scroll.draw(scrl)
 		love.graphics.printf(scrl.elements[i].text, scrl.elements[i].x, scrl.elements[i].y + scrl.elements[i].h / 5, scrl.elements[i].w, "center")
 	end
 	
-	love.graphics.pop()
 	love.graphics.setScissor()
+	love.graphics.pop()
 end
 
 function ui.scroll.pressed(scrl, id, x, y)
