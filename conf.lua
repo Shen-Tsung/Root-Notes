@@ -1,6 +1,7 @@
 function love.conf(t)
-	t.window.width = 1
-	t.window.height = 2
+	t.window.highdpi = true
+	t.window.usedpiscale = true
+	t.window.resizable = true
 	
 	-- Доступ к памяти
 	t.externalstorage = true

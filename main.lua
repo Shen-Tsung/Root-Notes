@@ -1,5 +1,6 @@
 local settings = require "Assets/settings" -- Загрузка настроек
 local ui = require "Assets/ui" -- Загрузка интерфейса
+local Width, Height
 
 local t = {} -- Текст
 local color = {} -- Цвета
@@ -8,10 +9,12 @@ local touch = {} -- Касания
 local button = {} -- Кнопки
 local scroll = {} -- Скролл области
 
+local box = {}
+
 -- Загрузка данных
 function love.load()
-	Height, Width = love.graphics.getDimensions() -- Ширина и высота экрана
-	Width = Width + 38
+	Width, Height = love.graphics.getDimensions() -- Ширина и высота экрана
+	--Width = Width + 38
 	
 	-- Подбор языка
 	local lang = require "Assets/lang"
@@ -50,11 +53,35 @@ function love.load()
 	
 	-- Создание скролл области ui.scroll.new(x, y, w, h)
 	scroll.notes = ui.scroll.new(Width / 2, Height / 2, Width, Height / 1.4)
-	scroll.element = {}
+	scroll.notes_element = {}
 	for i = 1, 12 do
-		scroll.element[i] = ui.scroll.new_element(scroll.notes, t.yes)
-		ui.scroll.add_element(scroll.notes, scroll.element[i])
+		scroll.notes_element[i] = ui.scroll.new_element(scroll.notes, t.yes)
+		ui.scroll.add_element(scroll.notes, scroll.notes_element[i])
 	end
+
+	box.x = Width / 2 - 50
+	box.y = Height / 2 - 50
+	box.w = 100
+	box.h = 100
+end
+
+function love.resize()
+	Width, Height = love.graphics.getDimensions()
+	ui.scroll.move(scroll.notes, Width / 2, Height / 2)
+	scroll.notes.w = Width
+	scroll.notes.h = Height / 1.4
+
+	for i = 1, #scroll.notes_element do
+		scroll.notes_element[i].x = scroll.notes.x + (scroll.notes.w - scroll.notes.w / 1.2) / 2
+		scroll.notes_element[i].y = scroll.notes.y + ((scroll.notes.h / 9) * i)
+		scroll.notes_element[i].w = scroll.notes.w / 1.2
+		scroll.notes_element[i].h = scroll.notes.h / 10
+	end
+
+	box.x = Width / 2 - 50
+	box.y = Height / 2 - 50
+	box.w = 100
+	box.h = 100
 end
 
 -- Обновление
@@ -64,7 +91,13 @@ end
 
 -- Отрисовка
 function love.draw()
-	ui.scroll.draw(scroll.notes)
+	love.graphics.push()
+	
+	ui.scroll.draw(scroll.notes) 
+	love.graphics.pop()
+
+	love.graphics.printf("Ширина = " .. Width, 0, 10, Width, "center")
+	love.graphics.printf("Высота = " .. Height, 0, 30, Width, "center")
 end
 
 -- Обработка касаний
@@ -81,4 +114,14 @@ function love.touchreleased(id)
 end
 
 -- Обработка мышки
---- ...
+function love.mousepressed(x, y)
+	ui.scroll.pressed(scroll.notes, 1, x, y)
+end
+
+function love.mousemoved(x, y)
+	ui.scroll.moved(scroll.notes, 1, x, y)
+end	
+
+function love.mousereleased(x, y)
+	ui.scroll.released(scroll.notes, 1)
+end

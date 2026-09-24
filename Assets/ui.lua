@@ -15,9 +15,6 @@ end
 -- __________Кнопка__________
 -- Создание кнопки
 function ui.button.new(text, x, y, w, h)
-	if w > 300 then w = 300 end
-	if h < 50 then h = 50 end
-	
 	return {
 				text = text or "text",
 				x = x - w / 2,
@@ -100,14 +97,19 @@ function ui.scroll.new(x, y, w, h)
 	}
 end
 
+function ui.scroll.move(scrl, x, y)
+	scrl.x = x - scrl.w / 2
+	scrl.y = y - scrl.h / 2
+end	
+
 -- Добавление элемента в скролл
 function ui.scroll.new_element(scrl, text)
 	return {
 		text = text,
 		x = scrl.x + (scrl.w - scrl.w / 1.2) / 2,
-		y = scrl.y + 10 + (60 * scrl.count),
+		y = scrl.y + ((scrl.h / 9) * scrl.count),
 		w = scrl.w / 1.2,
-		h = 50,
+		h = scrl.h / 10,
 		id = scrl.count,
 		element_color = color.object,
 		text_color = color.text
@@ -129,7 +131,7 @@ end
 -- Отрисовка скролла
 function ui.scroll.draw(scrl)
 	love.graphics.setColor(color.area)
-	love.graphics.rectangle("fill", scrl.x, scrl.y, scrl.w, scrl.h, 15, 15)
+	love.graphics.rectangle("fill", scrl.x, scrl.y, scrl.w, scrl.h, 30, 30)
 	
 	love.graphics.setScissor(scrl.x, scrl.y, scrl.w, scrl.h)
 	love.graphics.push()
@@ -138,7 +140,8 @@ function ui.scroll.draw(scrl)
 	-- Отрисовка элементов
 	for i = 1, #scrl.elements do
 		love.graphics.setColor(scrl.elements[i].element_color)
-		love.graphics.rectangle("fill", scrl.elements[i].x, scrl.elements[i].y, scrl.elements[i].w, scrl.elements[i].h, 15, 15)
+		
+		love.graphics.rectangle("fill", scrl.elements[i].x, scrl.elements[i].y, scrl.elements[i].w, scrl.elements[i].h, 10, 10)
 		
 		love.graphics.setColor(scrl.elements[i].text_color)
 		love.graphics.printf(scrl.elements[i].text, scrl.elements[i].x, scrl.elements[i].y + scrl.elements[i].h / 5, scrl.elements[i].w, "center")
