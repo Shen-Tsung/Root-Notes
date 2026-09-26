@@ -1,6 +1,6 @@
 function love.conf(t)
 	t.window.highdpi = true
-	t.window.usedpiscale = true
+	t.window.usedpiscale = false
 	t.window.resizable = true
 
 	t.window.width = 392

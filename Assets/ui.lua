@@ -107,7 +107,7 @@ function ui.scroll.new_element(scrl, text)
 	return {
 		text = text,
 		x = (scrl.w - scrl.w / 1.2) / 2,
-		y = (scrl.h / 9) * scrl.count,
+		y = scrl.h / 25 + (scrl.h / 9) * scrl.count,
 		w = scrl.w / 1.2,
 		h = scrl.h / 10,
 		id = scrl.count,
@@ -120,16 +120,20 @@ end
 function ui.scroll.add_element(scrl, element)
 	scrl.count = scrl.count + 1
 	table.insert(scrl.elements, element)
+	scrl.bottom_border = element.h * scrl.count * 1.1
 end	
 
 -- Удаление элемента из таблицы
 function ui.scroll.delete_element(scrl)
 	scrl.count = scrl.count - 1
 	table.remove(scrl.elements)
+	scrl.bottom_border = scrl.elements[-1].h * scrl.count * 1.1
 end	
 
 -- Отрисовка скролла
 function ui.scroll.draw(scrl)
+	love.graphics.printf(scrl.scroll_y, 0, 30, Width, "center")
+
 	love.graphics.setColor(color.area)
 	love.graphics.rectangle("fill", scrl.x, scrl.y, scrl.w, scrl.h, 30, 30)
 	
@@ -162,6 +166,11 @@ function ui.scroll.moved(scrl, id, x, y)
 	if touch[id] == "scrolling" then
 		local delta = y - scrl.start_y
 		scrl.scroll_y = scrl.start_scroll - delta
+
+		-- Ограничение скроллинга сверху и внизу
+		local content_h = (scrl.h / 9) * scrl.count + (scrl.h / 10)
+		local max_scroll = math.max(0, content_h - scrl.h)
+		scrl.scroll_y = math.floor(math.max(0, math.min(scrl.scroll_y, max_scroll - scrl.h / 25)))
 	end	
 end
 

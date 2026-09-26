@@ -9,12 +9,10 @@ local touch = {} -- Касания
 local button = {} -- Кнопки
 local scroll = {} -- Скролл области
 
-local box = {}
 
 -- Загрузка данных
 function love.load()
 	Width, Height = love.graphics.getDimensions() -- Ширина и высота экрана
-	--Width = Width + 38
 	
 	-- Подбор языка
 	local lang = require "Assets/lang"
@@ -54,15 +52,10 @@ function love.load()
 	-- Создание скролл области ui.scroll.new(x, y, w, h)
 	scroll.notes = ui.scroll.new(Width / 2, Height / 2, Width, Height / 1.4)
 	scroll.notes_element = {}
-	for i = 1, 12 do
+	for i = 1, 20 do
 		scroll.notes_element[i] = ui.scroll.new_element(scroll.notes, t.yes)
 		ui.scroll.add_element(scroll.notes, scroll.notes_element[i])
 	end
-
-	box.x = Width / 2 - 50
-	box.y = Height / 2 - 50
-	box.w = 100
-	box.h = 100
 end
 
 function love.resize()
@@ -77,11 +70,6 @@ function love.resize()
 		scroll.notes_element[i].w = scroll.notes.w / 1.2
 		scroll.notes_element[i].h = scroll.notes.h / 10
 	end
-
-	box.x = Width / 2 - 50
-	box.y = Height / 2 - 50
-	box.w = 100
-	box.h = 100
 end
 
 -- Обновление
@@ -91,13 +79,7 @@ end
 
 -- Отрисовка
 function love.draw()
-	love.graphics.push()
-	
 	ui.scroll.draw(scroll.notes) 
-	love.graphics.pop()
-
-	love.graphics.printf("Ширина = " .. love.graphics.getWidth(), 0, 10, Width, "center")
-	love.graphics.printf("DPI = " .. love.window.getDPIScale(), 0, 30, Width, "center")
 end
 
 -- Обработка касаний
